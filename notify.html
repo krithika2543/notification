@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notification System</title>
+    
+    <style>
+        #notification-container {
+            position: relative;
+            top: 20px;
+            z-index: 1;
+        }
+        .notification {
+            background-color: rgba(0, 8, 85, 0.322);
+            color: rgb(0, 0, 0);
+            padding: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+            margin-bottom: 12px;
+            font-size:small;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+          
+        }
+        .toggle {
+      display: inline-block;
+      border-radius: 50px;
+      padding: 0;
+      background: transparent;
+      border: none;
+      overflow: hidden;
+      height: 50;
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background-color: black;
+    }
+
+    .toggle img {
+      display: block;
+      width: 100%;
+      height: 50;
+      opacity:1
+    }
+
+    .toggle:hover{
+        box-shadow: 5px 5px 10px rgba(0,0,0,0.15);
+        cursor: pointer;
+    }
+
+    .toggle:active{
+      background-color: white;
+    }
+
+    </style>
+</head>
+<body>
+    <button class="toggle"> <img src= https://web-dev.imgix.net/image/vS06HQ1YTsbMKSFTIPl2iogUQP73/Lswkub5NhuBJ016OeSO1.png?auto=format height=50></button>
+    <audio id="notification-sound">
+      <source src="rickroll.mp3" type="audio/mpeg">
+    </audio>
+    <div id="notification-container"></div>
+
+    <script>
+        const notificationContainer = document.getElementById('notification-container');
+
+        function fetchJoke() {
+            fetch('https://official-joke-api.appspot.com/random_joke')
+                .then(response => response.json())
+                .then(data => {
+                    const setup = data.setup;
+                    const punchline = data.punchline;
+                    const notificationSound = document.getElementById('notification-sound');
+                    // Create the notification element
+                    const notification = document.createElement('div');
+                    notification.classList.add('notification');
+                    notification.innerHTML = `
+                        <h3>${setup}</h3>
+                        <p>${punchline}</p>
+                    `;
+                    
+                    // Add the notification to the container
+                    notificationContainer.appendChild(notification);
+                    
+                    // Play notification sound
+                    //playNotificationSound();
+                    notificationSound.play();
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                });
+        }
+/*
+        function playNotificationSound() {
+            const audio = new Audio('rick_roll.mp3');
+            audio.play();
+        }
+*/
+        // Fetch a joke periodically (e.g., every 10 seconds)
+        setInterval(fetchJoke, 10000);
+        
+     
+    document.addEventListener('DOMContentLoaded', function() {
+      var button = document.querySelector('.toggle');
+      var body = document.querySelector('body');
+      var notificationContainer = document.getElementById('notification-container');
+
+
+      button.addEventListener('click', function() {
+        if (body.style.backgroundColor === 'rgb(255, 255, 255)') {
+          body.style.backgroundColor = 'rgb(0,0,0)'; // Change to default background color
+          body.style.color='rgb(255, 255, 255)'
+          notificationContainer.style.backgroundColor='rgb(171, 212, 255)';
+          //body.classList.remove('white-text');
+        } else {
+          body.style.backgroundColor = '#ffffff'; // Change to white color
+          notificationContainer.style.backgroundColor='rgba(208, 213, 255, 0.322)'
+          body.style.color='rgb(0,0,0)';
+          //body.classList.add('white-text');
+        }
+      });
+    });
+
+    </script>
+</body>
+</html>
